@@ -22,7 +22,7 @@ public class InterviewTests extends BaseWebTest {
 
     private AccountModel accountModelToCreate() {
         return AccountModel.builder()
-                .accountName("TestInterviewAccount10")
+                .accountName("TestInterviewAccount")
                 .fax("9379992")
                 .phone("+39 222555458")
                 .website("websitetest.com")

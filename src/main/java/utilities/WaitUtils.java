@@ -8,11 +8,11 @@ import java.util.function.Function;
 
 public enum WaitUtils {
 
-    visible   (ExpectedConditions::visibilityOfElementLocated),
-    existAll  (ExpectedConditions::presenceOfAllElementsLocatedBy),
-    exist     (ExpectedConditions::presenceOfElementLocated),
-    clickable (ExpectedConditions::elementToBeClickable),
-    invisible (ExpectedConditions::invisibilityOfElementLocated);
+    visible(ExpectedConditions::visibilityOfElementLocated),
+    existAll(ExpectedConditions::presenceOfAllElementsLocatedBy),
+    exist(ExpectedConditions::presenceOfElementLocated),
+    clickable(ExpectedConditions::elementToBeClickable),
+    invisible(ExpectedConditions::invisibilityOfElementLocated);
 
     WaitUtils(Function<By, ExpectedCondition> type) {
         this.type = type;

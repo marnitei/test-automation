@@ -10,7 +10,8 @@ import org.openqa.selenium.WebElement;
 
 public class AccountPage extends BasePageObject {
 
-    private final By selectListOfAccountsButton = By.xpath("//button[@title='Select a List View']"),
+    private final int timeout = 15;
+    private By selectListOfAccountsButton = By.xpath("//button[@title='Select a List View']"),
             newAccountButton = By.linkText("New"),
             editAccountDetailsButton = By.xpath("//*[@title='Edit']"),
             accountNameLabelLocator = By.xpath("//*[text()='Account Name']/parent::label/following-sibling::*"),
@@ -19,7 +20,11 @@ public class AccountPage extends BasePageObject {
             accountPhoneInput = By.xpath("//*[text()='Phone']/parent::label/following-sibling::input"),
             accountFaxInput = By.xpath("//*[text()='Fax']/parent::label/following-sibling::input"),
             accountWebsiteInput = By.xpath("//*[text()='Website']/parent::label/following-sibling::input"),
-            saveAccountRecordButton = By.xpath("//button[@title='Save']");
+            saveAccountRecordButton = By.xpath("//button[@title='Save']"),
+            accountNameOutput = By.xpath("//*[text()='Account Name']/parent::div/following-sibling::div//lightning-formatted-text"),
+            accountPhoneOutput = By.xpath("//*[text()='Phone']/parent::div/following-sibling::div//lightning-formatted-phone"),
+            accountFaxOutput = By.xpath("//*[text()='Fax']/parent::div/following-sibling::div//lightning-formatted-phone"),
+            accountWebsiteOutput = By.xpath("//*[text()='Website']/parent::div/following-sibling::div//lightning-formatted-url");
 
     public AccountPage(WebDriver driver) {
         super(driver);
@@ -31,28 +36,30 @@ public class AccountPage extends BasePageObject {
 
     public AccountPage goToAccountListOverview() {
         driver.get(SystemProperty.getValue("ACCOUNTLIST_PAGE"));
+        waitForSpinner();
         return this;
     }
 
     public AccountPage openAllAccountsList() {
-        waitFor(selectListOfAccountsButton, WaitUtils.visible, 10);
+        waitFor(selectListOfAccountsButton, WaitUtils.visible, timeout);
         driver.findElement(selectListOfAccountsButton).click();
-        waitFor(By.xpath("//a/*[text()='All Accounts']"), WaitUtils.visible, 10);
+        waitFor(By.xpath("//a/*[text()='All Accounts']"), WaitUtils.visible, timeout);
         driver.findElement(By.xpath("//a/*[text()='All Accounts']")).click();
+        waitFor(By.xpath("//a/*[text()='All Accounts']"), WaitUtils.invisible, timeout);
         waitForSpinner();
         return this;
     }
 
     public AccountPage openAccountRecord(String accountName) {
-        waitFor(By.linkText(accountName), WaitUtils.clickable, 10);
+        waitFor(By.linkText(accountName), WaitUtils.clickable, timeout);
         driver.findElement(By.linkText(accountName)).click();
         return this;
     }
 
     public AccountPage clickOnNew() {
-        waitFor(newAccountButton, WaitUtils.visible, 10);
+        waitFor(newAccountButton, WaitUtils.visible, timeout);
         driver.findElement(newAccountButton).click();
-        waitFor(accountNameLabelLocator, WaitUtils.visible, 10);
+        waitFor(accountNameLabelLocator, WaitUtils.visible, timeout);
         return this;
     }
 
@@ -103,15 +110,15 @@ public class AccountPage extends BasePageObject {
 
     public AccountPage clickOnSave() {
         driver.findElement(saveAccountRecordButton).click();
-        waitFor(saveAccountRecordButton, WaitUtils.invisible, 10);
+        waitFor(saveAccountRecordButton, WaitUtils.invisible, timeout);
         waitForSpinner();
         return this;
     }
 
     public AccountPage clickOnEdit() {
-        waitFor(editAccountDetailsButton, WaitUtils.clickable, 10);
+        waitFor(editAccountDetailsButton, WaitUtils.clickable, timeout);
         driver.findElement(editAccountDetailsButton).click();
-        waitFor(By.xpath("//*[text()='Account Name']"), WaitUtils.visible, 10);
+        waitFor(By.xpath("//*[text()='Account Name']"), WaitUtils.visible, timeout);
         return this;
     }
 
@@ -120,23 +127,27 @@ public class AccountPage extends BasePageObject {
      */
 
     public String getAccountNameFieldValue() {
-        waitFor(By.xpath("//*[text()='Account Name']/parent::div/following-sibling::div//lightning-formatted-text"), WaitUtils.clickable, 10);
-        return driver.findElement(By.xpath("//*[text()='Account Name']/parent::div/following-sibling::div//lightning-formatted-text")).getText();
+        waitFor(accountNameOutput, WaitUtils.clickable, timeout);
+        return driver.findElement(accountNameOutput).getText();
     }
 
     public String getAccountFaxFieldValue() {
-        return driver.findElement(By.xpath("//*[text()='Fax']/parent::div/following-sibling::div//lightning-formatted-phone")).getText();
+        waitFor(accountFaxOutput, WaitUtils.clickable, timeout);
+        return driver.findElement(accountFaxOutput).getText();
     }
 
     public String getAccountPhoneFieldValue() {
-        return driver.findElement(By.xpath("//*[text()='Phone']/parent::div/following-sibling::div//lightning-formatted-phone")).getText();
+        waitFor(accountPhoneOutput, WaitUtils.clickable, timeout);
+        return driver.findElement(accountPhoneOutput).getText();
     }
 
     public String getAccountWebsiteFieldValue() {
-        return driver.findElement(By.xpath("//*[text()='Website']/parent::div/following-sibling::div//lightning-formatted-url")).getText();
+        waitFor(accountWebsiteOutput, WaitUtils.clickable, timeout);
+        return driver.findElement(accountWebsiteOutput).getText();
     }
 
     private void setTextValue(By inputField, String value) {
+        waitFor(inputField, WaitUtils.clickable, timeout);
         driver.findElement(inputField).clear();
         driver.findElement(inputField).sendKeys(value);
     }

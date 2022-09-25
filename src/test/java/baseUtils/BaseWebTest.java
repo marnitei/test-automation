@@ -25,6 +25,7 @@ public class BaseWebTest {
         driver.manage().deleteAllCookies();
         driver.manage().window().maximize();
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(15));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         orgLoginPage = new OrgLoginPage(driver);
         accountPage = new AccountPage(driver);
     }

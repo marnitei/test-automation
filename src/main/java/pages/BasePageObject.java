@@ -27,9 +27,9 @@ public class BasePageObject {
      * Custom Wait method based on Fluent Wait
      * Waits for element to be in condition till
      *
-     * @param locator    By element locator
-     * @param conditions WaitUtils conditions
-     * @param timeoutOfSeconds    int amount of seconds
+     * @param locator          By element locator
+     * @param conditions       WaitUtils conditions
+     * @param timeoutOfSeconds int amount of seconds
      * @return true if WaitUtils condition is met
      */
     public boolean waitFor(By locator, WaitUtils conditions, int timeoutOfSeconds) {
@@ -52,7 +52,7 @@ public class BasePageObject {
     }
 
     public void waitForSpinner() {
-        waitFor(By.className("lightning-spinner"), WaitUtils.invisible, 15);
+        waitFor(By.className("lightning-spinner"), WaitUtils.invisible, 20);
     }
 
 }
