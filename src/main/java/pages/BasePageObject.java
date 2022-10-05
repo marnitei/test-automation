@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.Wait;
 
 import java.time.Duration;
 
-public class BasePageObject {
+abstract class BasePageObject {
 
     public WebDriver driver;
 
@@ -34,14 +34,13 @@ public class BasePageObject {
      */
     public boolean waitFor(By locator, WaitUtils conditions, int timeoutOfSeconds) {
         Wait<WebDriver> waitForTests = new FluentWait<>(driver)
-                .pollingEvery(Duration.ofSeconds(1))
                 .withTimeout(Duration.ofSeconds(timeoutOfSeconds))
                 .ignoring(NoSuchElementException.class);
         try {
             waitForTests.until(conditions.getType().apply(locator));
             return true;
         } catch (TimeoutException ex) {
-            System.out.println("ERROR: Element isn't got exception condition. Element: " + locator);
+            System.out.println("!!!Warning: Element isn't got exception condition. Element: " + locator);
             return false;
         }
     }

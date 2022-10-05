@@ -1,7 +1,6 @@
 package testImplementations.account;
 
 import models.AccountModel;
-import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import pages.AccountPage;
 
@@ -11,12 +10,12 @@ public class CreateNewAccount {
     AccountPage accountView;
     AccountModel accountData;
 
-    public CreateNewAccount(AccountPage accountPage, AccountModel accountModel) {
-        accountView = accountPage;
+    public CreateNewAccount(AccountModel accountModel, AccountPage pageObject) {
         accountData = accountModel;
+        accountView = pageObject;
     }
 
-    public AccountPage createNewAccount() {
+    public void createNewAccount() {
         SoftAssert softAssert = new SoftAssert();
         accountView.goToAccountListOverview().openAllAccountsList().clickOnNew();
         Optional.ofNullable(accountData.getAccountName()).ifPresent(accountView::fillAccountName);
@@ -27,6 +26,5 @@ public class CreateNewAccount {
         softAssert.assertTrue(accountView.getAlert().contains("Account \"" + accountData.getAccountName() + "\" was created"), "Alert mismatch");
         softAssert.assertEquals(accountView.getAccountNameFieldValue(), accountData.getAccountName(), "Account was not created or Account Name is wrong");
         softAssert.assertAll();
-        return this.accountView;
     }
 }

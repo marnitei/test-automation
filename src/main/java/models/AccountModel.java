@@ -13,4 +13,5 @@ public class AccountModel {
     String fax;
     String website;
     String parentAccount;
+    String newAccountName;
 }

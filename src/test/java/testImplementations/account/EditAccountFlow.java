@@ -11,28 +11,26 @@ public class EditAccountFlow {
     AccountPage accountView;
     AccountModel accountUpdatesModel;
 
-    public EditAccountFlow(AccountPage accountPage, AccountModel accountModelUpdates) {
-        accountView = accountPage;
+    public EditAccountFlow(AccountModel accountModelUpdates, AccountPage pageObject) {
+        accountView = pageObject;
         this.accountUpdatesModel = accountModelUpdates;
     }
 
-    public void editAccount(String accountName) {
+    public void editAccount(String accountName, AccountModel expectedResult) {
         SoftAssert softAssert = new SoftAssert();
+
         accountView.goToAccountListOverview().openAllAccountsList().openAccountRecord(accountName).clickOnEdit();
-        Optional.ofNullable(accountUpdatesModel.getAccountName()).ifPresent(accountView::fillAccountName);
+        Optional.ofNullable(accountUpdatesModel.getNewAccountName()).ifPresent(accountView::fillAccountName);
         Optional.ofNullable(accountUpdatesModel.getPhone()).ifPresent(accountView::setAccountPhone);
         Optional.ofNullable(accountUpdatesModel.getFax()).ifPresent(accountView::setAccountFax);
         Optional.ofNullable(accountUpdatesModel.getWebsite()).ifPresent(accountView::setAccountWebsite);
         accountView.clickOnSave();
 
-        softAssert.assertEquals(accountView.getAccountFaxFieldValue(), accountUpdatesModel.getFax(), "Account Fax was not updated");
-        softAssert.assertEquals(accountView.getAccountPhoneFieldValue(), accountUpdatesModel.getPhone(), "Account Phone was not updated");
-        softAssert.assertEquals(accountView.getAccountWebsiteFieldValue(), accountUpdatesModel.getWebsite(), "Account Website was not updated");
-        if (accountUpdatesModel.getAccountName() == null) {
-            softAssert.assertEquals(accountView.getAccountNameFieldValue(), accountName, "Account Name was not updated");
-        } else {
-            softAssert.assertEquals(accountView.getAccountNameFieldValue(), accountUpdatesModel.getAccountName(), "Account Name is wrong");
-        }
+        softAssert.assertEquals(accountView.getAccountFaxFieldValue(), expectedResult.getFax(), "Account Fax was not updated");
+        softAssert.assertEquals(accountView.getAccountPhoneFieldValue(), expectedResult.getPhone(), "Account Phone was not updated");
+        softAssert.assertEquals(accountView.getAccountWebsiteFieldValue(), expectedResult.getWebsite(), "Account Website was not updated");
+        softAssert.assertEquals(accountView.getAccountNameFieldValue(), expectedResult.getAccountName(), "Account Name is wrong");
         softAssert.assertAll();
     }
+
 }
